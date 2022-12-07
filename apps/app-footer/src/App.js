@@ -4,7 +4,7 @@ const App = () => {
 
     return (
         <div>
-            <h1>Footer is HERE</h1>
+            <h1>This is AuthenticationApp</h1>
             <input type="text"/>
         </div>)
 }

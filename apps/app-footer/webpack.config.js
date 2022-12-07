@@ -8,7 +8,7 @@ module.exports = {
     mode: 'development',
     devServer: {
         static: path.join(__dirname, 'dist'),
-        port: config.apps.footer.port,
+        port: config.apps.authentication.port,
     },
     output: {
         publicPath: 'auto',
@@ -28,7 +28,7 @@ module.exports = {
     plugins: [
         // create remoteEntry to use in another apps
         new ModuleFederationPlugin({
-            name: config.apps.footer.name,
+            name: config.apps.authentication.name,
             filename: `remoteEntry.js`,
             exposes: {
                 './App': './src/App',
