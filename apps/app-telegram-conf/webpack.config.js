@@ -26,7 +26,7 @@ const { BASE_URL = 'https://web.telegram.org/z/' } = process.env;
 module.exports = (_env, { mode = 'production' }) => {
     return {
         mode,
-        entry: './src/index.tsx',
+        entry: './src/index.ts',
         target: 'web',
 
         devServer: {
@@ -132,7 +132,13 @@ module.exports = (_env, { mode = 'production' }) => {
         },
 
         plugins: [
-
+          new ModuleFederationPlugin({
+            name: config.apps.authentication.name,
+            remotes: {
+              [config.apps.authentication.name]: `${config.apps.authentication.name}@[authentication_url]/remoteEntry.js`,
+            },
+            shared: {react: {singleton: true}, "react-dom": {singleton: true}},
+          }),
           // Clearing of the unused files for code highlight for smaller chunk count
           new ContextReplacementPlugin(
                 /highlight\.js\/lib\/languages/,
