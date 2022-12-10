@@ -10,10 +10,15 @@ module.exports = {
             port : 3006,
             url : "http://localhost:3006",
         },
-        footer : {
-            name : "footer",
+        account : {
+            name : "account",
             port : 3007,
             url : "http://localhost:3007",
+        },
+        footer : {
+            name : "footer",
+            port : 3008,
+            url : "http://localhost:3008",
         }
     },
 }

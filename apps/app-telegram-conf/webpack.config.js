@@ -1,22 +1,20 @@
+const config = require("../../config");
+
+const {ModuleFederationPlugin} = require("webpack").container;
 const path = require('path');
 const dotenv = require('dotenv');
 
 const {
-    DefinePlugin,
-    EnvironmentPlugin,
     ProvidePlugin,
     ContextReplacementPlugin,
     NormalModuleReplacementPlugin,
 } = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
 const StatoscopeWebpackPlugin = require('@statoscope/webpack-plugin').default;
 const WebpackContextExtension = require('./dev/webpackContextExtension');
-const appVersion = require('./package.json').version;
 
 const {
-    HEAD,
     APP_ENV = 'production',
     APP_MOCKED_CLIENT = '',
 } = process.env;
@@ -134,8 +132,9 @@ module.exports = (_env, { mode = 'production' }) => {
         },
 
         plugins: [
-            // Clearing of the unused files for code highlight for smaller chunk count
-            new ContextReplacementPlugin(
+
+          // Clearing of the unused files for code highlight for smaller chunk count
+          new ContextReplacementPlugin(
                 /highlight\.js\/lib\/languages/,
                 /^((?!\.js\.js).)*$/
             ),
@@ -156,23 +155,23 @@ module.exports = (_env, { mode = 'production' }) => {
                 chunkFilename: '[name].[chunkhash].css',
                 ignoreOrder: true,
             }),
-            new EnvironmentPlugin({
-                APP_ENV,
-                APP_MOCKED_CLIENT,
-                APP_NAME: null,
-                APP_VERSION: appVersion,
-                RELEASE_DATETIME: Date.now(),
-                // TELEGRAM_T_API_ID: undefined,
-                // TELEGRAM_T_API_HASH: undefined,
-                TEST_SESSION: null,
-            }),
-            new DefinePlugin({
-                APP_REVISION: DefinePlugin.runtimeValue(() => {
-                    const { branch, commit } = getGitMetadata();
-                    const shouldDisplayCommit = APP_ENV === 'staging' || !branch || branch === 'HEAD';
-                    return JSON.stringify(shouldDisplayCommit ? commit : branch);
-                }, mode === 'development' ? true : []),
-            }),
+            // new EnvironmentPlugin({
+            //     APP_ENV,
+            //     APP_MOCKED_CLIENT,
+            //     APP_NAME: null,
+            //     APP_VERSION: appVersion,
+            //     RELEASE_DATETIME: Date.now(),
+            //     // TELEGRAM_T_API_ID: undefined,
+            //     // TELEGRAM_T_API_HASH: undefined,
+            //     TEST_SESSION: null,
+            // }),
+            // new DefinePlugin({
+            //     APP_REVISION: DefinePlugin.runtimeValue(() => {
+            //         const { branch, commit } = getGitMetadata();
+            //         const shouldDisplayCommit = APP_ENV === 'staging' || !branch || branch === 'HEAD';
+            //         return JSON.stringify(shouldDisplayCommit ? commit : branch);
+            //     }, mode === 'development' ? true : []),
+            // }),
             new ProvidePlugin({
                 Buffer: ['buffer', 'Buffer'],
             }),
@@ -197,10 +196,3 @@ module.exports = (_env, { mode = 'production' }) => {
         }),
     };
 };
-
-function getGitMetadata() {
-    const gitRevisionPlugin = new GitRevisionPlugin();
-    const branch = HEAD || gitRevisionPlugin.branch();
-    const commit = gitRevisionPlugin.commithash().substring(0, 7);
-    return { branch, commit };
-}
