@@ -16,7 +16,7 @@ const App = () => {
             textAlign:"center",
             backgroundColor:"cyan"
         }}>
-            You are Logged in ? {isLoggedIn}
+            You are Logged in ? {!isLoggedIn}
 
             {isLoggedIn ? <div>This is Messenger</div> : <AuthenticationRemoteApp/>}
         </div>
